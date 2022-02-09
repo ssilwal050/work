@@ -1,1 +1,91 @@
-points(1,5, pch=4
+#################### MV HWK 1###########################
+
+
+library(MASS)
+library(ellipse)
+library(mixtools)
+
+# A matrix
+A <- matrix(c(1, 1, 2, -1), nrow = 2, byrow = TRUE)
+
+# mean vector
+u <- matrix(c(1, 5), ncol = 1, byrow = FALSE)
+
+# covariance matrix
+sigma <- matrix(c(1, 0.5, 0.5, 1), nrow = 2, byrow = TRUE)
+
+# mean of AX
+Mean.AX <- A%*%u
+Mean.AX
+
+# covariance of AX
+Cov.AX <- A%*%sigma%*%t(A)
+Cov.A
+
+
+
+# conditional mean = mu1 + sigma12/sigma22(x-mu2)
+sigma11 <- sigma[1,1]
+sigma12 <- sigma[1,2]
+sigma22 <- sigma[2,2]
+Cov.X1.X2 <- sigma11 - ((sigma12)^2)/sigma22
+
+
+  
+# eigen value of sigma
+e.value <- eigen(sigma)$values
+e.value
+
+# eigen vectors of sigma
+e.vec <- eigen(sigma)$vectors
+e.vec
+
+
+
+# c value
+c <- sqrt(qchisq(0.95, 2))
+
+# major axis
+major.axis1 <- u - c*sqrt(e.value[1])*matrix(e.vec[,1])
+major.axis1
+major.axis2 <- u + c*sqrt(e.value[1])*matrix(e.vec[,1])
+major.axis2
+
+# minor axis
+minor.axis1 <- u - c*sqrt(e.value[2])*matrix(e.vec[,2])
+minor.axis1
+minor.axis2 <- u + c*sqrt(e.value[2])*matrix(e.vec[,2])
+minor.axis2
+
+ellipse(c(1,5), sigma, alpha=0.05, npoints = 100, newplot=TRUE,
+        draw=TRUE, type="l", main="95% Probability Contour Plot")
+points(1,5, pch=4)
+
+# major axis
+x1 <- u[1] + c*sqrt(e.value[1])*matrix(e.vec[1,1])
+y1 <- u[2] + c*sqrt(e.value[1])*matrix(e.vec[2,1])
+x2 <- u[1] - c*sqrt(e.value[1])*matrix(e.vec[1,1])
+y2 <- u[2] - c*sqrt(e.value[1])*matrix(e.vec[2,1])
+
+# minor axis
+x3 <- u[1] + c*sqrt(e.value[2])*matrix(e.vec[1,2])
+y3 <- u[2] + c*sqrt(e.value[2])*matrix(e.vec[2,2])
+x4 <- u[1] - c*sqrt(e.value[2])*matrix(e.vec[1,2])
+y4 <- u[2] - c*sqrt(e.value[2])*matrix(e.vec[2,2])
+points(x1, y1)
+points(x2, y2)
+points(x3, y3)
+points(x4, y4)
+
+segments(x1, y1, x2, y2, col = 'blue')
+segments(x3, y3, x4, y4, col = 'blue')
+
+
+
+
+
+
+
+
+
+
